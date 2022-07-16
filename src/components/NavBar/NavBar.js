@@ -16,7 +16,7 @@ const NavBar = () => {
         <div className="navbar-links flex flex-space-evenly">
             <button className="btn btn-hover sign-in">Login <i className="fa-solid fa-arrow-right"></i></button>
             <Link to="/"><i className="fa-solid fa-video" title="Upload Video"></i></Link>
-            <Link to="/"><i className="fa-solid fa-compass" title="Explore Videos"></i></Link>
+            <Link to="/explore"><i className="fa-solid fa-compass" title="Explore Videos"></i></Link>
             <div className="menu-dropdown">
                 <i className="fa-solid fa-user dropbtn" onClick={()=>{ setToggleMenu(!toggleMenu)}}></i>
                 <div className="dropdown-content" style={{display: toggleMenu ? "block" : "none"}}>
