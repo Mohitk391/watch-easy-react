@@ -1,39 +1,39 @@
 //import { useEffect, useState } from "react";
+import axios from "axios";
+import { useWatchLater } from "../../contexts/WatchLaterContext";
 import "./videocard.css";
-
-/*const calculateUploadTime = (videoTime) => {
-    var currentTime = new Date();
-
-    var uploadTime = currentTime.getTime() - videoTime.getTime() / (1000) ;
-    if (uploadTime > 2628288 ){
-        uploadTime = Math.floor(uploadTime/(60*60*24*30));
-        uploadTime = `${uploadTime} months`;
-    }
-    else if(uploadTime > 86400){
-        uploadTime = Math.floor(uploadTime/(60*60*24));
-        uploadTime = `${uploadTime} days`;
-    }
-    else if(uploadTime > 3600){
-        uploadTime = Math.floor(uploadTime/(60*60));
-        uploadTime = `${uploadTime} hours`;
-    }
-    else if(uploadTime > 60){
-        uploadTime = Math.floor(uploadTime/(60));
-        uploadTime = `${uploadTime} minutes`;
-    }
-    else {
-        uploadTime = `${uploadTime} seconds`;
-    }
-    return uploadTime;
-}*/
 
 const VideoCard = (props) => {
     const video = props.video;
-    //const [uploadedTime , setUploadedTime] = useState(video.uploadTime);
+    const {watchLaterState, watchLaterDispatch } = useWatchLater();
+    const token = localStorage.getItem("token");
+    const { watchLater } = watchLaterState;
 
-    /* useEffect (() => {
-    //     setUploadedTime(calculateUploadTime(uploadedTime));
-    // },[]);*/
+    const updateWatchLater = async ( video, type) => {
+        try {
+            const response = (type === "ADD") ? await axios.post("/api/user/watchlater",
+            {
+                video
+            },
+            {
+                headers: {
+                    authorization: token
+                },
+            }
+        ) : axios.delete(`/api/user/watchlater/${video._id}`,
+            {
+                headers: {
+                    authorization: token
+                },
+            }
+        );
+        watchLaterDispatch("SET_WATCHLATER", response.data.watchlater);
+        }
+        catch(error){
+            console.error(error);
+        }
+    }
+
 
     return (
         <div className="card vertical-card flex video-card flex-column">
@@ -45,7 +45,9 @@ const VideoCard = (props) => {
             <div className="card-title">{video.title}</div>
             <p className="sub-title">{video.creator}</p>
             <div className="h6"> {video.viewsCount} Views &#8226;  4 months ago</div>
-            <button className="btn btn-hover add-to-cart-button watchlaterbtn">Watch Later</button>
+            { !watchLater.find(wlvideo => wlvideo._id === video._id) ? <button className="btn btn-hover add-to-cart-button watchlaterbtn" onClick={()=>{ updateWatchLater(video, "ADD")}}>Watch Later</button>
+                : <button className="btn btn-hover remove-from-wishlist-button watchlaterbtn" onClick={()=>{ updateWatchLater(video, "REMOVE")}}>Remove From Watch Later</button>
+            }
         </div>
     );
 }
