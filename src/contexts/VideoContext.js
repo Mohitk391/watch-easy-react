@@ -1,11 +1,20 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import {tempVideos} from "../data/temp-data";
+import axios from "axios";
 const VideoContext = createContext();
 
 const VideoProvider = ({children}) => {
     const [videos, setVideos] = useState([]);
     useEffect (()=>{
-        setVideos(tempVideos);
+        const fetchVideos = async () => {
+            try {
+                const response = await axios.get("/api/videos");
+                setVideos(response.data.videos);
+            }
+            catch(error){
+                console.error(error);
+            }
+        }
+        fetchVideos();
     },[]);
     return (<VideoContext.Provider value={{videos}}>
         {children}
