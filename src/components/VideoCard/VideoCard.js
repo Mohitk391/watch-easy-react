@@ -12,7 +12,7 @@ const VideoCard = (props) => {
     const token = localStorage.getItem("token");
     const { watchLater } = watchLaterState;
 
-    const updateWatchLater = async ( video, type) => {
+    const updateWatchLater = async (video, type) => {
         try {
             const response = (type === "ADD") ? await axios.post("/api/user/watchlater",
             {
@@ -23,21 +23,21 @@ const VideoCard = (props) => {
                     authorization: token
                 },
             }
-        ) : axios.delete(`/api/user/watchlater/${video._id}`,
+        ) : await axios.delete(`/api/user/watchlater/${video._id}`,
             {
                 headers: {
                     authorization: token
                 },
             }
         );
-        watchLaterDispatch("SET_WATCHLATER", response.data.watchlater);
+        watchLaterDispatch({type: "SET_WATCHLATER", payload: response.data.watchlater});
         }
         catch(error){
             console.error(error);
         }
     }
 
-    const updateLiked = async ( video, type) => {
+    const updateLiked = async (video, type) => {
         try {
             const response = (type === "ADD") ? await axios.post("/api/user/likes",
             {
@@ -48,14 +48,14 @@ const VideoCard = (props) => {
                     authorization: token
                 },
             }
-        ) : axios.delete(`/api/user/likes/${video._id}`,
+        ) : await axios.delete(`/api/user/likes/${video._id}`,
             {
                 headers: {
                     authorization: token
                 },
             }
         );
-        likesDispatch("SET_LIKES", response.data.likes);
+        likesDispatch({type: "SET_LIKES",payload: response.data.likes});
         }
         catch(error){
             console.error(error);

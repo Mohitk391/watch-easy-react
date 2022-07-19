@@ -5,7 +5,7 @@ import { VideoCard } from "../../components/VideoCard/VideoCard";
 import { Link } from "react-router-dom";
 
 const WatchLater = () => {
-    const watchLaterState  = useWatchLater();
+    const { watchLaterState } = useWatchLater();
     const { watchLater } = watchLaterState;
     return (
         <div class="page-layout">
@@ -15,7 +15,7 @@ const WatchLater = () => {
                 <h2>Watch Later</h2>
             </div>
             <div class="watch-later-content flex flex-wrap flex-gap-1">
-                { watchLater ? (
+                { watchLater.length>0 ? (
                     watchLater.map( video => {
                     return (
                         <VideoCard video={video} />
