@@ -1,0 +1,92 @@
+.login-main{
+    height: 70vh;
+}
+
+.signup-main{
+    height: 90vh;
+}
+
+.login-form{
+    border: 1px solid var(--black);
+    border-radius: 1rem;
+    width: 30%;
+    height: 90%;
+    background-color: var(--bg-modal);
+}
+
+.signup-form{
+    border: 1px solid var(--black);
+    border-radius: 1rem;
+    width: 35%;
+    height: 95%;
+    background-color: var(--bg-modal);
+}
+
+.form-title{
+    padding:5px 10px;
+    gap: 2px;
+}
+
+.incorrect-input{
+    font-size: 12px;
+    color: var(--text-danger);
+}
+
+input.incorrect-input {
+    border:1px solid var(--text-danger) !important;
+    color: var(--text-danger);
+    outline: var(--text-danger) !important;
+}
+
+.form-input, .name-input{
+    width: 80%;
+}
+
+.form-input label, .user-name label{
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    text-align: center;
+    color: var(--text-primary);
+    padding-left: 0.5rem;
+}
+
+.form-input input, .user-name input{
+    border: 1px solid var(--bg-border);
+    outline: none;
+    border-radius: 1rem;
+    padding: 0.5rem 1rem
+}
+
+.user-name input{
+    width: 80%;
+    align-self: center;
+}
+
+#isPasswordVisible {
+    position: absolute;
+    left: 90%;
+    top: 52.5%;
+    background-color: transparent;
+    border: none;
+}
+
+
+.extras{
+    width: 80%;
+    align-items: center;
+    font-size: 0.8rem;
+}
+.extras > div {
+    gap: 5px;
+}
+
+.forgot-pwd{
+    text-decoration: none;
+    color: var(--text-danger);
+}
+
+.auth-button {
+    width: 80%;
+    background-color: var(--bg-primary);
+}
