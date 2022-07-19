@@ -1,0 +1,96 @@
+
+.playlist-main{
+    padding: 1rem 5rem;
+    display: grid;
+    gap: 1rem;
+}
+
+.playlist-header, .cp-header{
+    align-items: center;
+}
+.create-playlist-button{
+    justify-self: flex-start;    
+}
+
+.create-playlist-button:hover{
+    background-color: var(--bg-danger);
+    color: var(--text-primary)
+}
+
+.playlist:nth-child(even){
+    cursor: pointer;
+    background-color: var(--bg-highlight);
+}
+
+.playlist:nth-child(odd){
+    cursor: pointer;
+    background-color: var(--bg-warning);
+}
+
+.playlist:hover{
+    background-color: var(--text-primary);
+    color: var(--bg-primary);
+}
+
+.playlist-content-details{
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--text-secondary);
+}
+
+.delete-playlist{
+    align-self: center;
+    padding: 1em;
+    cursor: pointer;
+}
+
+.create-playlist-layer{
+    position: absolute;
+    background-color:#00000096; 
+    width: 100%;
+    height: 100vh;
+    color: var(--white);
+    /* visibility: hidden;this class should be replaced by overlay layer class from component library, once it is updated there.  */
+}
+
+.create-playlist{
+    background-color: var(--white);
+    color: var(--black);
+    padding: 1rem;
+    border-radius: 10px;
+    gap: 1rem;
+    width: 25%;
+}
+
+.close{
+    border: 1px solid var(--bg-secondary);
+    padding: 2px;
+    width: 1.5625rem;
+    height: 1.5625rem;
+    border-radius: 1rem;
+}
+.close:hover{
+    background: var(--black);
+    color: var(--white);
+}
+
+.cp-content label{
+    font-size: 0.8rem;
+    font-weight: 700;
+}
+
+.cp-content input{
+    border: 1px solid var(--bg-secondary);
+    outline:none;
+    border-radius: 10px;
+    padding: 5px 10px;
+    margin-bottom: 5px;
+}
+
+.create-button{
+    width: 100%;
+}
+.create-button:hover{
+    background-color: var(--bg-primary);
+    color: var(--black);
+}
