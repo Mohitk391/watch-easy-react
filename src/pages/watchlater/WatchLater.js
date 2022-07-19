@@ -18,7 +18,7 @@ const WatchLater = () => {
                 { watchLater.length>0 ? (
                     watchLater.map( video => {
                     return (
-                        <VideoCard video={video} />
+                        <VideoCard video={video} type={"like"} />
                     ) 
                 })
                 ) : (

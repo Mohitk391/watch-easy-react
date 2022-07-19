@@ -18,7 +18,7 @@ const Liked = () => {
                 { likes.length>0 ? (
                     likes.map( video => {
                     return (
-                        <VideoCard video={video} />
+                        <VideoCard video={video} type={"like"} />
                     ) 
                 })
                 ) : (

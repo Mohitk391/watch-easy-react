@@ -1,10 +1,12 @@
 import "./NavBar.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { useUser } from "../../contexts";
 
 const NavBar = () => {
-
+    const { userState,userDispatch } = useUser();
     const [toggleMenu, setToggleMenu] = useState(false);
+    const navigate = useNavigate();
 
     return (
     <nav className="navbar-2">
@@ -14,7 +16,9 @@ const NavBar = () => {
             <i className="fa-solid fa-magnifying-glass"></i>
         </div>
         <div className="navbar-links flex flex-space-evenly">
-            <button className="btn btn-hover sign-in">Login <i className="fa-solid fa-arrow-right"></i></button>
+            { !userState.isUserLoggedIn ? <Link to="/login"><button className="btn btn-hover sign-in">Login <i className="fa-solid fa-arrow-right"></i></button></Link> :
+            <button className="btn btn-hover sign-in" onClick = {()=>{localStorage.removeItem('token');userDispatch({type:"UNSET_USER"}); navigate("/login")}}>Logout</button>
+            }
             <Link to="/"><i className="fa-solid fa-video" title="Upload Video"></i></Link>
             <Link to="/explore"><i className="fa-solid fa-compass" title="Explore Videos"></i></Link>
             <div className="menu-dropdown">

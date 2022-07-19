@@ -5,6 +5,8 @@ import {HomePage} from "./pages/homepage/HomePage";
 import { Playlist } from "./pages/playlist/Playlist";
 import {WatchLater } from "./pages/watchlater/WatchLater";
 import { Liked } from "./pages/liked/Liked";
+import { History } from "./pages/history/History";
+import { Login, Signup } from "./pages/authentication/index";
 
 function App() {
   return (
@@ -17,7 +19,9 @@ function App() {
         <Route path="/playlist" element={ <Playlist /> } />
         <Route path="/watchlater" element={ <WatchLater /> } />
         <Route path="/liked" element={ <Liked /> } />
-        <Route path="/history" element={ <HomePage /> } />
+        <Route path="/history" element={ <History /> } />
+        <Route path="/login" element={ <Login />} />
+        <Route path="/signup" element={ <Signup />} />
       </Routes>
     </div>
   );
