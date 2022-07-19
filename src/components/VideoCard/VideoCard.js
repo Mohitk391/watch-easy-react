@@ -1,11 +1,14 @@
 //import { useEffect, useState } from "react";
 import axios from "axios";
 import { useWatchLater } from "../../contexts/WatchLaterContext";
+import { useLike } from "../../contexts/LikeContext";
 import "./videocard.css";
 
 const VideoCard = (props) => {
     const video = props.video;
     const {watchLaterState, watchLaterDispatch } = useWatchLater();
+    const {likesState, likesDispatch} = useLike();
+    const { likes } = likesState;
     const token = localStorage.getItem("token");
     const { watchLater } = watchLaterState;
 
@@ -34,11 +37,40 @@ const VideoCard = (props) => {
         }
     }
 
+    const updateLiked = async ( video, type) => {
+        try {
+            const response = (type === "ADD") ? await axios.post("/api/user/likes",
+            {
+                video
+            },
+            {
+                headers: {
+                    authorization: token
+                },
+            }
+        ) : axios.delete(`/api/user/likes/${video._id}`,
+            {
+                headers: {
+                    authorization: token
+                },
+            }
+        );
+        likesDispatch("SET_LIKES", response.data.likes);
+        }
+        catch(error){
+            console.error(error);
+        }
+    }
+
 
     return (
         <div className="card vertical-card flex video-card flex-column">
             <div className="video-card-image pos-relative">
-                <span className="card-badge top-right"><i className="fa-regular fa-heart" title="Like"></i></span>
+                <span className="card-badge top-right">
+                    { !likes.find(lvideo=> lvideo._id === video._id) ? <i className="fa-regular fa-heart" title="Like" onClick={()=>updateLiked(video,"ADD")}></i>
+                        : <i className="fa-solid fa-heart" title="DisLike" onClick={()=>updateLiked(video,"REMOVE")}></i>
+                    }
+                </span>
                 <img src={video.poster} alt={video.title}/>
                 <span className="video-card-timer bottom-right">{video.time}</span>
             </div>
