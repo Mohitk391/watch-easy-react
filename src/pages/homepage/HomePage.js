@@ -15,7 +15,7 @@ function HomePage() {
                             <p className="card-title">IPL</p>
                             <p className="h3">IPL Best moments</p>
                             <div className="h6">Watch the best moments from TATA IPL 2022</div>
-                            <button className="btn btn-hover btn-banner remove-from-wishlist-button">Watch Now</button>
+                            <button className="btn btn-hover btn-banner remove-from-wishlist-button"><Link to={`/watch/JOW-pOahbro`}>Watch Now</Link></button>
                         </div>
                     </div>
                 </div>

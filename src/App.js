@@ -7,6 +7,7 @@ import {WatchLater } from "./pages/watchlater/WatchLater";
 import { Liked } from "./pages/liked/Liked";
 import { History } from "./pages/history/History";
 import { Login, Signup } from "./pages/authentication/index";
+import { SingleVideo } from "./pages/singleVideoPage/SingleVideo";
 
 function App() {
   return (
@@ -14,9 +15,10 @@ function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/explore" element={ <Explore /> } />
-        <Route path="/watch/:id" element={ <Explore />} />
+        <Route path="/watch/:id" element={ <SingleVideo />} />
         <Route path="/profile" element={ <HomePage /> } />
         <Route path="/playlist" element={ <Playlist /> } />
+        <Route path="/singlePlaylist/:id" element={<Playlist />} />
         <Route path="/watchlater" element={ <WatchLater /> } />
         <Route path="/liked" element={ <Liked /> } />
         <Route path="/history" element={ <History /> } />
