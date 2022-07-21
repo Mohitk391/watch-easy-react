@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { NavBar } from "../../components/NavBar/NavBar";
 import "./style.css";
 
@@ -21,7 +22,7 @@ function HomePage() {
                 <div className="most-viewed-section">
                     <div className="flex flex-space-between ">
                         <div className="section-title">Must Watch</div>
-                        <a className="all-videos-link" href="/video-listing.html">All Videos...</a>
+                        <Link className="all-videos-link" to="/explore">All Videos...</Link>
                     </div>
                     <div className="section flex">
                         <div className="card vertical-card flex video-card flex-column flex-gap-1 flex-center">

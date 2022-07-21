@@ -1,0 +1,52 @@
+.video-card{
+    width: 15rem;
+    cursor: pointer;
+}
+
+div.video-card > *:not(:first-child):not(:last-child) {
+    margin-bottom: 5px;
+    padding-left: 5px;
+}
+
+.video-card .card-badge{
+    width: 25px;
+    height: 25px;
+    border-radius: 100%;
+    background: none;
+    color: var(--black);
+    margin: 0 0.5rem;
+    padding: 0.1rem 0.3rem;
+}
+
+.video-card .card-badge:hover{
+    background-color: var(--white);
+}
+
+.video-card-timer {
+        position: absolute;
+        background: var(--black);
+        color: var(--white);
+        padding: 2px 5px;
+        margin: 5px; 
+        font-size: 0.8rem;
+    
+}
+
+.video-card .card-title{
+    font-size: 1rem;
+}
+
+.video-card .sub-title, .video-card .h6{
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+}
+
+.video-card .h6 {
+    font-weight: 700;
+}
+
+.video-card button{
+    /* background-color: var(--bg-primary); */
+    width: 100%;
+    border-radius: 0; 
+}
