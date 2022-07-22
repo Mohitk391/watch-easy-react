@@ -1,0 +1,18 @@
+.history-main{
+    padding: 1rem 5rem;
+    display: grid;
+    gap: 1rem;
+}
+
+.clear-history-button{
+    background-color: var(--text-primary);
+    color: var(--text-danger);
+    border-radius: 1rem;
+}
+
+.clear-history-button:hover{
+    background-color: var(--bg-danger);
+    color: var(--black);
+    transition: 0.5s ease;
+    box-shadow: 0 6px 10px 0 var(--box-shadow);
+}

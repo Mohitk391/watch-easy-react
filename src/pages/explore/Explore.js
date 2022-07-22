@@ -33,7 +33,7 @@ const Explore = () => {
                 </aside>
                 <div className="content-section flex flex-wrap flex-gap-2">
                     {videos.map(video => {
-                        return (<VideoCard video={video} />);
+                        return (<VideoCard video={video} type={"like"} />);
                     })}
                 </div>
             </div>

@@ -20,7 +20,7 @@ const PlaylistProvider = ({children}) => {
                         }
                     }
                 );
-                playlistDispatch("SET_PLAYLIST", response.data.playlists);
+                playlistDispatch({type: "SET_PLAYLIST", payload: response.data.playlists});
             }
             catch(error){
                 console.error(error);

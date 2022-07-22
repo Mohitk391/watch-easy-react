@@ -15,10 +15,10 @@ const Liked = () => {
                 <h2>Liked Videos</h2>
             </div>
             <div class="liked-content flex flex-wrap flex-gap-1">
-                { likes ? (
+                { likes.length>0 ? (
                     likes.map( video => {
                     return (
-                        <VideoCard video={video} />
+                        <VideoCard video={video} type={"like"} />
                     ) 
                 })
                 ) : (

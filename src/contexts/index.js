@@ -1,6 +1,8 @@
-import { VideoProvider } from "./VideoContext";
-import { WatchLaterProvider } from "./WatchLaterContext";
-import { PlaylistProvider } from "./PlaylistContext";
-import { LikeProvider } from "./LikeContext";
+import { useVideo,VideoProvider } from "./VideoContext";
+import { useWatchLater, WatchLaterProvider } from "./WatchLaterContext";
+import { usePlaylist, PlaylistProvider } from "./PlaylistContext";
+import { useLike, LikeProvider } from "./LikeContext";
+import { useUser, UserProvider } from "./UserContext";
+import { useHistory, HistoryProvider } from "./HistoryContext";
 
-export { VideoProvider, WatchLaterProvider, PlaylistProvider, LikeProvider};
+export { VideoProvider, useVideo, WatchLaterProvider, useWatchLater, PlaylistProvider, usePlaylist, LikeProvider, useLike, UserProvider, useUser, HistoryProvider, useHistory};
