@@ -6,7 +6,7 @@
     gap: 1.5rem;
 } 
 
-.specialized-banner, .most-viewed-section,.category-section{
+.specialized-banner,.category-section{
     width: 90vw;
 }
 
@@ -43,12 +43,6 @@
     padding-left: 5px;
 }
 
-.all-videos-link{
-    align-self: center;
-    text-decoration: none;
-    color: var(--text-primary);
-}
-
 .section{
     gap: 0.5rem;
     padding: 0.5rem;
@@ -56,14 +50,6 @@
 
 .section button{
     width: 100%;
-}
-
-.watchlaterbtn{
-    border-radius:0;
-}
-
-.video-card{
-    cursor: pointer;
 }
 
 .categories{
@@ -89,7 +75,7 @@
 .overlay-layer-2{
     position: absolute;
     top: 6rem;
-    left: 5rem;
+    left: 7rem;
     font-weight: 700;
     font-size: 1.5rem;
     display: flex;

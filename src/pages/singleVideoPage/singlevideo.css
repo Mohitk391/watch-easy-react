@@ -1,0 +1,79 @@
+.single-video-main{
+    display:grid;
+    grid-template-columns: 2fr 1fr;
+    padding-top: 1rem;
+}
+
+.video-content{
+    justify-self: center;
+    width: 80%;
+}
+
+.video-content> *{
+    margin-bottom:1rem;
+}
+
+.video-actions{
+    align-items:center;
+}
+
+.description-body{
+    font-size: 0.8rem;
+}
+
+.action-details{
+    cursor: pointer;
+    gap: 3px;
+    align-items: center;
+}
+
+
+.create-playlist-layer{
+    position: absolute;
+    background-color:#00000096; 
+    width: 100%;
+    height: 100vh;
+    color: var(--white);
+}
+
+.create-playlist{
+    background-color: var(--white);
+    color: var(--black);
+    padding: 1rem;
+    border-radius: 10px;
+    gap: 1rem;
+    width: 25%;
+}
+
+.close{
+    border: 1px solid var(--bg-secondary);
+    padding: 2px;
+    width: 1.5625rem;
+    height: 1.5625rem;
+    border-radius: 1rem;
+}
+.close:hover{
+    background: var(--black);
+    color: var(--white);
+}
+
+.cp-content label{
+    font-size: 0.8rem;
+    font-weight: 700;
+}
+
+.cp-content input{
+    border: 1px solid var(--bg-secondary);
+    outline:none;
+    border-radius: 10px;
+    padding: 5px 10px;
+    margin-bottom: 5px;
+}
+
+.create-button{
+    width: 100%;
+}
+.create-button:hover{
+    background-color: var(--bg-primary);
+    color: var(--black);
+}

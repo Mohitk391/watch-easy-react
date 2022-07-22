@@ -12,14 +12,10 @@ div.video-card > *:not(:first-child):not(:last-child) {
     width: 25px;
     height: 25px;
     border-radius: 100%;
-    background: none;
+    background-color: var(--white);
     color: var(--black);
     margin: 0 0.5rem;
     padding: 0.1rem 0.3rem;
-}
-
-.video-card .card-badge:hover{
-    background-color: var(--white);
 }
 
 .video-card-timer {
@@ -34,11 +30,17 @@ div.video-card > *:not(:first-child):not(:last-child) {
 
 .video-card .card-title{
     font-size: 1rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 300px;
+    text-decoration: none !important;
 }
 
 .video-card .sub-title, .video-card .h6{
     font-size: 0.8rem;
-    color: var(--text-secondary);
+    color: var(--text-secondary) !important;
+
 }
 
 .video-card .h6 {
@@ -49,4 +51,9 @@ div.video-card > *:not(:first-child):not(:last-child) {
     /* background-color: var(--bg-primary); */
     width: 100%;
     border-radius: 0; 
+}
+
+a {
+    color: unset;
+    text-decoration: none;
 }
