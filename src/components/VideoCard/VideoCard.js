@@ -2,18 +2,20 @@ import axios from "axios";
 import { useWatchLater } from "../../contexts/WatchLaterContext";
 import { useLike } from "../../contexts/LikeContext";
 import "./videocard.css";
-import { useHistory } from "../../contexts";
+import { useHistory, usePlaylist } from "../../contexts";
 import { Link } from "react-router-dom";
 
 const VideoCard = (props) => {
     const video = props.video;
     const type = props.type;
+    const playlist = props.playlist;
     const {watchLaterState, watchLaterDispatch } = useWatchLater();
     const { watchLater } = watchLaterState;
     const {likesState, likesDispatch} = useLike();
     const { likes } = likesState;
     const token = localStorage.getItem("token");
     const { historyDispatch } = useHistory();
+    const {playlistDispatch} = usePlaylist();
 
     const updateWatchLater = async (video, type) => {
         try {
@@ -65,6 +67,22 @@ const VideoCard = (props) => {
         }
     }
 
+    const removeFromPlaylist = async (video, playlist) => {
+        try{
+            const response = await axios.delete(`/api/user/playlists/${playlist._id}/${video._id}`,
+                {
+                    headers:{
+                        authorization: token
+                    }
+                }
+            )
+            playlistDispatch({type: "SET_VIDEO_TO_PLAYLIST",payload: response.data.playlist});
+        }
+        catch(error){
+            console.error(error);
+        }
+    }
+
     const removeFromHistory = async (video) => {
         try{
             const response = await axios.delete(`/api/user/history/${video._id}`,
@@ -96,7 +114,10 @@ const VideoCard = (props) => {
                     }
                     </span> :
                     <span className="card-badge top-right">
+                        { type !== "deleteFromPlaylist" ?
                         <i class="fa-solid fa-trash-can" onClick={()=>removeFromHistory(video)}></i>
+                        : <i class="fa-solid fa-trash-can" onClick={()=>removeFromPlaylist(video, playlist)}></i>
+                    }
                     </span>
                 }
                 <div className="card-title">{video.title}</div>

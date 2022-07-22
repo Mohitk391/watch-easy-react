@@ -94,7 +94,7 @@ const Playlist = () => {
                             <input type="text" placeholder="Here decription for the playlist comes" value={formInputs.description} id="playlistDescription"onChange={e=> setFormInputs({...formInputs, description: e.target.value})}/>
                         </div>
                         <div className="footer-button flex flex-center">
-                            <button className="btn btn-hover create-button" onClick={e=>createPlaylist(e)}>Create</button>
+                            <button className="btn btn-hover create-button" onClick={e=>{createPlaylist(e); toggleOverlay("hidden");}}>Create</button>
                         </div>
                     </form>
                 </div>

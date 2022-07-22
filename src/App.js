@@ -8,6 +8,7 @@ import { Liked } from "./pages/liked/Liked";
 import { History } from "./pages/history/History";
 import { Login, Signup } from "./pages/authentication/index";
 import { SingleVideo } from "./pages/singleVideoPage/SingleVideo";
+import { SinglePlaylist } from "./pages/playlist/SinglePlaylist";
 
 function App() {
   return (
@@ -18,7 +19,7 @@ function App() {
         <Route path="/watch/:id" element={ <SingleVideo />} />
         <Route path="/profile" element={ <HomePage /> } />
         <Route path="/playlist" element={ <Playlist /> } />
-        <Route path="/singlePlaylist/:id" element={<Playlist />} />
+        <Route path="/singlePlaylist/:id" element={<SinglePlaylist />} />
         <Route path="/watchlater" element={ <WatchLater /> } />
         <Route path="/liked" element={ <Liked /> } />
         <Route path="/history" element={ <History /> } />
