@@ -9,6 +9,8 @@ import { History } from "./pages/history/History";
 import { Login, Signup } from "./pages/authentication/index";
 import { SingleVideo } from "./pages/singleVideoPage/SingleVideo";
 import { SinglePlaylist } from "./pages/playlist/SinglePlaylist";
+import { ToastContainer } from "react-toastify";
+import { RequiresAuth } from "./utils/AuthCheck/RequiresAuth";
 
 function App() {
   return (
@@ -17,15 +19,45 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/explore" element={ <Explore /> } />
         <Route path="/watch/:id" element={ <SingleVideo />} />
-        <Route path="/profile" element={ <HomePage /> } />
-        <Route path="/playlist" element={ <Playlist /> } />
-        <Route path="/singlePlaylist/:id" element={<SinglePlaylist />} />
-        <Route path="/watchlater" element={ <WatchLater /> } />
-        <Route path="/liked" element={ <Liked /> } />
-        <Route path="/history" element={ <History /> } />
         <Route path="/login" element={ <Login />} />
         <Route path="/signup" element={ <Signup />} />
+        <Route
+          path="/playlist"
+          element={ 
+            <RequiresAuth>
+              <Playlist /> 
+            </RequiresAuth>
+          } />
+        <Route 
+          path="/singlePlaylist/:id" 
+          element={
+            <RequiresAuth>
+              <SinglePlaylist />
+            </RequiresAuth>
+          } />
+        <Route 
+          path="/watchlater" 
+          element={ 
+            <RequiresAuth>
+              <WatchLater />
+            </RequiresAuth>
+          } />
+        <Route 
+          path="/liked" 
+          element={ 
+            <RequiresAuth>
+              <Liked /> 
+            </RequiresAuth>
+          } />
+        <Route 
+          path="/history" 
+          element={ 
+          <RequiresAuth>
+            <History />
+          </RequiresAuth>
+          } />
       </Routes>
+      <ToastContainer />
     </div>
   );
 }
