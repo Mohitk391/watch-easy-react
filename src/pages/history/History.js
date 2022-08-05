@@ -3,7 +3,8 @@ import "./history.css";
 import { VideoCard } from "../../components/VideoCard/VideoCard";
 import { useHistory } from "../../contexts";
 import { Link } from "react-router-dom";
-import axios from "axios";
+import { clearHistoryHandler } from "../../utils/APICallHandlers/HistoryService";
+import { showToast } from "../../utils/toasts/toast";
 
 const History = () => {
     const { historyState, historyDispatch } = useHistory();
@@ -11,18 +12,14 @@ const History = () => {
     const token = localStorage.getItem("token");
 
     const clearHistory = async () => {
-        try {
-            const response = await axios.delete("/api/user/history/all",
-                {
-                    headers : {
-                        authorization: token
-                    }
-                }
-            );
+        const response = await clearHistoryHandler(token);
+        if(response.status === 200){
             historyDispatch({type: "SET_HISTORY", payload: response.data.history});
+            showToast("success","History cleared successfully!!!");
         }
-        catch(error){
-            console.error(error);
+        else{
+            showToast("error","Some error occured, Sorry for the inconvenience!!");
+            console.log(response.data.message);
         }
     }
 

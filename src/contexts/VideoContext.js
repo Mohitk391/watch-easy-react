@@ -1,17 +1,20 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import axios from "axios";
+import { getAllVideos } from "../utils/APICallHandlers/VideoService";
+import { showToast } from "../utils/toasts/toast";
 const VideoContext = createContext();
 
 const VideoProvider = ({children}) => {
     const [videos, setVideos] = useState([]);
     useEffect (()=>{
         const fetchVideos = async () => {
-            try {
-                const response = await axios.get("/api/videos");
+            const response = await getAllVideos();
+
+            if(response.status === 200){
                 setVideos(response.data.videos);
             }
-            catch(error){
-                console.error(error);
+            else {
+                showToast("error", "Some error occured, Sorry for the inconvenience!!");
+                console.log(response.data.message);
             }
         }
         fetchVideos();

@@ -1,9 +1,11 @@
 import { useState } from "react";
-import axios from "axios";
 import { NavBar } from "../../components/NavBar/NavBar";
 import { usePlaylist } from "../../contexts/PlaylistContext";
 import "./playlist.css";
 import { Link } from "react-router-dom";
+import {showToast} from "../../utils/toasts/toast";
+import 'react-toastify/dist/ReactToastify.css';
+import { addNewPlaylist } from "../../utils/APICallHandlers/PlaylistService";
 
 const Playlist = () => {
     const [overlay, toggleOverlay] = useState("hidden");
@@ -14,39 +16,33 @@ const Playlist = () => {
 
     const createPlaylist = async (e) =>{
         e.preventDefault();
-        try{
-            const response = await axios.post("/api/user/playlists",
-                {
-                    playlist : formInputs
-                },
-                {
-                    headers: {
-                        authorization: token
-                    }
-                }
-            );
-            playlistDispatch({type:"SET_PLAYLIST", payload:response.data.playlists});
-            setFormInputs({title:"", description: ""});
+        if((formInputs.title.trim()).length === 0){
+            showToast("error", "Name field is empty, Please fill the Name field!!")
+            console.error("Title is empty");
         }
-        catch(error){
-            console.error(error);
-        }  
+        else{
+            const response = await addNewPlaylist(formInputs, token);
+            if(response.status===201){
+                playlistDispatch({type:"SET_PLAYLIST", payload:response.data.playlists});
+                showToast("success", `${formInputs.title} is created!!`)
+                toggleOverlay("hidden");
+                setFormInputs({title:"", description: ""});
+            }
+            else {
+                showToast("error", "Something seems broken, sorry for the inconvinience");
+            }
+        }
     }
 
     const deletePlaylist = async (playlistId) => {
-        try{
-            const response = await axios.delete(`/api/user/playlists/${playlistId}`,
-                {
-                    headers: {
-                        authorization: token
-                    }
-                }
-            );
+        const response = await deletePlaylist(playlistId, token);
+        if(response.status=== 200){
             playlistDispatch({type:"SET_PLAYLIST", payload:response.data.playlists});
+            showToast("delete", "Playlist is deleted successfully!!!");
         }
-        catch(error){
-            console.error(error);
-        } 
+        else {
+            showToast("error", "Something seems broken, sorry for the inconvinience");
+        }
     }
     return (
         <div className="page-layout pos-relative">
@@ -94,7 +90,7 @@ const Playlist = () => {
                             <input type="text" placeholder="Here decription for the playlist comes" value={formInputs.description} id="playlistDescription"onChange={e=> setFormInputs({...formInputs, description: e.target.value})}/>
                         </div>
                         <div className="footer-button flex flex-center">
-                            <button className="btn btn-hover create-button" onClick={e=>{createPlaylist(e); toggleOverlay("hidden");}}>Create</button>
+                            <button className="btn btn-hover create-button" onClick={e=>{createPlaylist(e);}}>Create</button>
                         </div>
                     </form>
                 </div>

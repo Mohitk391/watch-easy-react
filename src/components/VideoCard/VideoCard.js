@@ -1,9 +1,13 @@
-import axios from "axios";
 import { useWatchLater } from "../../contexts/WatchLaterContext";
 import { useLike } from "../../contexts/LikeContext";
 import "./videocard.css";
 import { useHistory, usePlaylist } from "../../contexts";
 import { Link } from "react-router-dom";
+import { removeFromHistoryHandler } from "../../utils/APICallHandlers/HistoryService";
+import { showToast } from "../../utils/toasts/toast";
+import { addToWatchLater, deleteFromWatchLater } from "../../utils/APICallHandlers/WatchLaterService";
+import { addToLikes, deleteFromLikes } from "../../utils/APICallHandlers/LikeService";
+import { removeVideoFromPlaylist } from "../../utils/APICallHandlers/PlaylistService";
 
 const VideoCard = (props) => {
     const video = props.video;
@@ -18,84 +22,55 @@ const VideoCard = (props) => {
     const {playlistDispatch} = usePlaylist();
 
     const updateWatchLater = async (video, type) => {
-        try {
-            const response = (type === "ADD") ? await axios.post("/api/user/watchlater",
-            {
-                video
-            },
-            {
-                headers: {
-                    authorization: token
-                },
-            }
-        ) : await axios.delete(`/api/user/watchlater/${video._id}`,
-            {
-                headers: {
-                    authorization: token
-                },
-            }
-        );
-        watchLaterDispatch({type: "SET_WATCHLATER", payload: response.data.watchlater});
+        const response = (type === "ADD") ? await addToWatchLater(video, token) : await deleteFromWatchLater(video, token);
+        if(response.status === 201){
+            watchLaterDispatch({type: "SET_WATCHLATER", payload: response.data.watchlater});
+            showToast("success", "Video is added to Watch Later");
         }
-        catch(error){
-            console.error(error);
+        else if(response.status === 200){
+            watchLaterDispatch({type: "SET_WATCHLATER", payload: response.data.watchlater});
+            showToast("delete", "Video is removed from Watch Later");
+        }
+        else {
+            showToast("error", "Something seems broken, sorry for the inconvinience");
         }
     }
 
     const updateLiked = async (video, type) => {
-        try {
-            const response = (type === "ADD") ? await axios.post("/api/user/likes",
-            {
-                video
-            },
-            {
-                headers: {
-                    authorization: token
-                },
-            }
-        ) : await axios.delete(`/api/user/likes/${video._id}`,
-            {
-                headers: {
-                    authorization: token
-                },
-            }
-        );
-        likesDispatch({type: "SET_LIKES",payload: response.data.likes});
+        const response = (type === "ADD") ? await addToLikes(video, token) : await deleteFromLikes(video, token);
+        if(response.status === 201){
+            likesDispatch({type: "SET_LIKES", payload: response.data.likes});
+            showToast("success", "Video is added to Liked Videos section");
         }
-        catch(error){
-            console.error(error);
+        else if(response.status === 200){
+            likesDispatch({type: "SET_LIKES", payload: response.data.likes});
+            showToast("delete", "Video is removed from Liked Videos section");
+        }
+        else {
+            showToast("error", "Something seems broken, sorry for the inconvinience");
         }
     }
 
     const removeFromPlaylist = async (video, playlist) => {
-        try{
-            const response = await axios.delete(`/api/user/playlists/${playlist._id}/${video._id}`,
-                {
-                    headers:{
-                        authorization: token
-                    }
-                }
-            )
+        const response = await removeVideoFromPlaylist(playlist._id, video._id, token);
+        if(response.status === 200){
             playlistDispatch({type: "SET_VIDEO_TO_PLAYLIST",payload: response.data.playlist});
+            showToast("delete", `Video is removed from ${playlist.title} playlist`);
         }
-        catch(error){
-            console.error(error);
+        else {
+            showToast("error", "Something seems broken, sorry for the inconvinience");
         }
     }
 
     const removeFromHistory = async (video) => {
-        try{
-            const response = await axios.delete(`/api/user/history/${video._id}`,
-                {
-                    headers:{
-                        authorization: token
-                    }
-                }
-            )
+        const response = await removeFromHistoryHandler(video,token);
+        if(response.status === 200){
             historyDispatch({type: "SET_HISTORY", payload: response.data.history});
+            showToast("success", "Video removed from history successfully!!!");
         }
-        catch(error){
-            console.error(error);
+        else {
+            showToast("error","Some error occured, Sorry for the inconvenience!!");
+            console.log(response.data.message);
         }
     }
 

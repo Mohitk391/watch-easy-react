@@ -1,143 +1,124 @@
 import { NavBar } from "../../components/NavBar/NavBar";
 import "./singlevideo.css";
 import { useWatchLater, useLike, useVideo, useHistory, usePlaylist } from "../../contexts";
-import axios from "axios";
-import { useParams } from "react-router-dom";
+import { Navigate, useParams } from "react-router-dom";
 import { VideoCard } from "../../components/VideoCard/VideoCard";
 import { useEffect, useState } from "react";
+import { addToHistoryHandler } from "../../utils/APICallHandlers/HistoryService";
+import { showToast } from "../../utils/toasts/toast";
+import { getVideo } from "../../utils/APICallHandlers/VideoService";
+import { addToWatchLater, deleteFromWatchLater } from "../../utils/APICallHandlers/WatchLaterService";
+import { addToLikes, deleteFromLikes } from "../../utils/APICallHandlers/LikeService";
+import { addNewPlaylist, addNewVideoToPlaylist, removeVideoFromPlaylist } from "../../utils/APICallHandlers/PlaylistService";
 
 const SingleVideo = () => {
     const { videos } = useVideo();
     const params = useParams();
-    const video = videos.find(video=>video._id===params.id);
-    const mustWatch = videos.filter(eachVideo => eachVideo.category === video.category && eachVideo !== video);
+    const [video, setVideo] = useState([]);
+    const [mustWatch, setMustWatch] = useState([]);
     const { watchLaterState:{watchLater}, watchLaterDispatch } = useWatchLater();
     const { likesState: {likes},likesDispatch } = useLike();
-    const { historyDispatch } = useHistory();
+    const { historyState: {history}, historyDispatch } = useHistory();
     const [overlay, toggleOverlay] = useState("hidden");
     const [formInputs, setFormInputs] = useState({title:"", description: ""});
     const { playlistState:{playlists}, playlistDispatch} = usePlaylist();
     const token = localStorage.getItem("token");
 
-    useEffect(() => {
-        const addToHistory = async () => {
-            try{
-                    const response = await axios.post("/api/user/history",
-                    {
-                        video
-                    },
-                        {
-                            headers: {
-                                authorization: token
-                            }
-                        }
-                    );
-                    historyDispatch({type:"SET_HISTORY", payload: response.data.history});
-                }
-                catch(error){
-                    console.error(error);
-                }
+    const addToHistory = async (video) => {
+        if(token){
+            const response = await addToHistoryHandler(video, token);
+            if(response.status === 201){
+                historyDispatch({type:"SET_HISTORY", payload: response.data.history});
             }
-            addToHistory();
+            else {
+                showToast("error", "error occured");
+            }
+        }
+    }
+
+    useEffect(()=>{
+        const getCurrentVideo = async() =>{
+            const response = await getVideo(params.id);
+            if(response.status === 200){
+                setVideo(response.data.video);
+                setMustWatch(videos.filter(currentVideo=> currentVideo.category===response.data.video.category && currentVideo._id!==response.data.video._id));
+                if(!history.some(vid=> vid._id===response.data.video._id)){
+                    addToHistory(response.data.video);
+                }  
+            }
+            else{
+                showToast("error", "unable to fetch video");
+                Navigate("/explore");
+            }
+        }
+        getCurrentVideo();
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [video]);
+    },[params.id]);
     
 
     const updateWatchLater = async (video, type) => {
-        try {
-            const response = (type === "ADD") ? await axios.post("/api/user/watchlater",
-            {
-                video
-            },
-            {
-                headers: {
-                    authorization: token
-                },
-            }
-        ) : await axios.delete(`/api/user/watchlater/${video._id}`,
-            {
-                headers: {
-                    authorization: token
-                },
-            }
-        );
-        watchLaterDispatch({type: "SET_WATCHLATER", payload: response.data.watchlater});
+        const response = (type === "ADD") ? await addToWatchLater(video, token) : await deleteFromWatchLater(video, token);
+        if(response.status === 201){
+            watchLaterDispatch({type: "SET_WATCHLATER", payload: response.data.watchlater});
+            showToast("success", "Video is added to Watch Later");
         }
-        catch(error){
-            console.error(error);
+        else if(response.status === 200){
+            watchLaterDispatch({type: "SET_WATCHLATER", payload: response.data.watchlater});
+            showToast("delete", "Video is removed from Watch Later");
+        }
+        else {
+            showToast("error", "Something seems broken, sorry for the inconvinience");
         }
     }
 
     const updateLiked = async (video, type) => {
-        try {
-            const response = (type === "ADD") ? await axios.post("/api/user/likes",
-            {
-                video
-            },
-            {
-                headers: {
-                    authorization: token
-                },
-            }
-        ) : await axios.delete(`/api/user/likes/${video._id}`,
-            {
-                headers: {
-                    authorization: token
-                },
-            }
-        );
-        likesDispatch({type: "SET_LIKES",payload: response.data.likes});
+        const response = (type === "ADD") ? await addToLikes(video, token) : await deleteFromLikes(video, token);
+        if(response.status === 201){
+            likesDispatch({type: "SET_LIKES", payload: response.data.likes});
+            showToast("success", "Video is added to Liked Videos section");
         }
-        catch(error){
-            console.error(error);
+        else if(response.status === 200){
+            likesDispatch({type: "SET_LIKES", payload: response.data.likes});
+            showToast("delete", "Video is removed from Liked Videos section");
+        }
+        else {
+            showToast("error", "Something seems broken, sorry for the inconvinience");
         }
     }
 
     const updateVideoInPlaylist = async (playlist, video, type) => {
-        try {
-            const response = (type === "ADD") ? await axios.post(`/api/user/playlists/${playlist._id}`,
-            {
-                video
-            },
-            {
-                headers: {
-                    authorization: token
-                },
-            }
-        ) : await axios.delete(`/api/user/playlists/${playlist._id}/${video._id}`,
-            {
-                headers: {
-                    authorization: token
-                },
-            }
-        );
-        playlistDispatch({type: "SET_VIDEO_TO_PLAYLIST",payload: response.data.playlist});
+        const response = (type === "ADD") ? await addNewVideoToPlaylist(playlist._id,video,token) : await removeVideoFromPlaylist(playlist._id, video._id, token);
+        if(response.status === 201){
+            playlistDispatch({type: "SET_VIDEO_TO_PLAYLIST",payload: response.data.playlist});
+            showToast("success", `Video is added to ${playlist.title} playlist`);
         }
-        catch(error){
-            console.error(error);
+        else if(response.status === 200){
+            playlistDispatch({type: "SET_VIDEO_TO_PLAYLIST",payload: response.data.playlist});
+            showToast("delete", `Video is removed from ${playlist.title} playlist`);
+        }
+        else {
+            showToast("error", "Something seems broken, sorry for the inconvinience");
         }
     }
 
     const addToPlaylistHandler = async (e) => {
         e.preventDefault();
-        try{
-            const response = await axios.post("/api/user/playlists",
-                {
-                    playlist : formInputs
-                },
-                {
-                    headers: {
-                        authorization: token
-                    }
-                }
-            );
-            playlistDispatch({type:"SET_PLAYLIST", payload:response.data.playlists});
-            setFormInputs({title:"", description: ""});
+        if((formInputs.title.trim()).length === 0){
+            showToast("error", "Name field is empty, Please fill the Name field!!")
+            console.error("Title is empty");
         }
-        catch(error){
-            console.error(error);
-        }  
-        
+        else{
+            const response = await addNewPlaylist(formInputs, token);
+            if(response.status===201){
+                playlistDispatch({type:"SET_PLAYLIST", payload:response.data.playlists});
+                setFormInputs({title:"", description: ""});
+                showToast("success", "Playlist is created successfully")
+            }
+            else {
+                showToast("error", "Something seems broken, sorry for the inconvinience");
+            }
+        }
     }
 
     return (
@@ -148,7 +129,7 @@ const SingleVideo = () => {
                 <iframe src={`https://www.youtube.com/embed/${video._id}`}
                         frameborder='0'
                         allow='autoplay; encrypted-media; accelerometer; clipboard-write; gyroscope; picture-in-picture'
-                        allowFullscreen='true'
+                        allowFullScreen='true'
                         title='video'
                         width="675"
                         height="360"
