@@ -5,7 +5,7 @@ import "./playlist.css";
 import { Link } from "react-router-dom";
 import {showToast} from "../../utils/toasts/toast";
 import 'react-toastify/dist/ReactToastify.css';
-import { addNewPlaylist } from "../../utils/APICallHandlers/PlaylistService";
+import { addNewPlaylist, deletePlaylist } from "../../utils/APICallHandlers/PlaylistService";
 
 const Playlist = () => {
     const [overlay, toggleOverlay] = useState("hidden");
@@ -34,7 +34,7 @@ const Playlist = () => {
         }
     }
 
-    const deletePlaylist = async (playlistId) => {
+    const removePlaylist = async (playlistId) => {
         const response = await deletePlaylist(playlistId, token);
         if(response.status=== 200){
             playlistDispatch({type:"SET_PLAYLIST", payload:response.data.playlists});
@@ -64,7 +64,7 @@ const Playlist = () => {
                                     <div className="playlist-content-details">{playlist.videos.length} videos</div>
                                 </div>
                             </Link>
-                            <div className="delete-playlist" onClick={()=> deletePlaylist(playlist._id)}>
+                            <div className="delete-playlist" onClick={()=> removePlaylist(playlist._id)}>
                                 <i className="fa-solid fa-trash"></i>
                             </div>
                         </div>
